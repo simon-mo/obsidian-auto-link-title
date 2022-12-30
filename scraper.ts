@@ -1,4 +1,4 @@
-const electronPkg = require("electron");
+// const electronPkg = require("electron");
 import { request } from "obsidian";
 
 function blank(text: string): boolean {
@@ -18,41 +18,41 @@ async function load(window: any, url: string): Promise<void> {
   });
 }
 
-async function electronGetPageTitle(url: string): Promise<string> {
-  const { remote } = electronPkg;
-  const { BrowserWindow } = remote;
+// async function electronGetPageTitle(url: string): Promise<string> {
+//   const { remote } = electronPkg;
+//   const { BrowserWindow } = remote;
 
-  try {
-    const window = new BrowserWindow({
-      width: 1000,
-      height: 600,
-      webPreferences: {
-        webSecurity: false,
-        nodeIntegration: true,
-        images: false,
-      },
-      show: false,
-    });
+//   try {
+//     const window = new BrowserWindow({
+//       width: 1000,
+//       height: 600,
+//       webPreferences: {
+//         webSecurity: false,
+//         nodeIntegration: true,
+//         images: false,
+//       },
+//       show: false,
+//     });
 
-    await load(window, url);
+//     await load(window, url);
 
-    try {
-      const title = window.webContents.getTitle();
-      window.destroy();
+//     try {
+//       const title = window.webContents.getTitle();
+//       window.destroy();
 
-      if (notBlank(title)) {
-        return title;
-      } else {
-        return url;
-      }
-    } catch (ex) {
-      return url;
-    }
-  } catch (ex) {
-    console.error(ex);
-    return "Site Unreachable";
-  }
-}
+//       if (notBlank(title)) {
+//         return title;
+//       } else {
+//         return url;
+//       }
+//     } catch (ex) {
+//       return url;
+//     }
+//   } catch (ex) {
+//     console.error(ex);
+//     return "Site Unreachable";
+//   }
+// }
 
 async function nonElectronGetPageTitle(url: string): Promise<string> {
   try {
@@ -85,10 +85,11 @@ export default async function getPageTitle(url: string): Promise<string> {
   if (!(url.startsWith("http") || url.startsWith("https"))) {
     url = "https://" + url;
   }
+  return nonElectronGetPageTitle(url);
 
-  if (electronPkg != null) {
-    return electronGetPageTitle(url);
-  } else {
-    return nonElectronGetPageTitle(url);
-  }
+  // if (electronPkg != null) {
+  //   return electronGetPageTitle(url);
+  // } else {
+  //   return nonElectronGetPageTitle(url);
+  // }
 }
